@@ -1,0 +1,5 @@
+{
+  "name": "usage-pace",
+  "owner": { "name": "rca-umb" },
+  "plugins": [{ "name": "usage-pace", "source": "./" }]
+}

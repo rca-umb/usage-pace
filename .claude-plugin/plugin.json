@@ -1,0 +1,33 @@
+{
+  "name": "usage-pace",
+  "version": "0.5.0",
+  "description": "Adds a pace indicator for your 5h and 7d usage to your existing status line, and can tint the session color to match.",
+  "author": { "name": "rca-umb" },
+  "userConfig": {
+    "sessionColor": {
+      "type": "string",
+      "title": "Session color follows pace",
+      "description": "Run /color green, yellow or red as the chosen window's pace changes; worse follows whichever window is further over pace.",
+      "options": ["off", "5h", "7d", "worse"],
+      "default": "5h"
+    },
+    "aheadIsPositive": {
+      "type": "boolean",
+      "title": "Ahead of pace is positive",
+      "description": "Show being under pace as a positive number instead of a negative one.",
+      "default": false
+    },
+    "threshold": {
+      "type": "number",
+      "title": "On-track band",
+      "description": "Points either side of pace that still count as on track (yellow).",
+      "default": 5
+    },
+    "showCountdown": {
+      "type": "boolean",
+      "title": "Show 5h reset countdown",
+      "description": "Append how long until the 5-hour window resets.",
+      "default": true
+    }
+  }
+}
