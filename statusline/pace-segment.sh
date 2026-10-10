@@ -13,12 +13,12 @@ pace_diff() {
   awk -v u="$1" -v r="$2" -v n="$now" -v w="$3" -v t="$threshold" -v f="$flip" \
     'BEGIN {
        e = (1 - (r - n) / w) * 100; if (e < 0) e = 0; if (e > 100) e = 100;
-       d = u - e;
+       x = u - e + 0.5; d = int(x); if (d > x) d -= 1;
        if (d > t) color = "\033[31m";
        else if (d < -t) color = "\033[32m";
        else color = "\033[33m";
        shown = f == 1 ? -d : d;
-       s = sprintf("%+.0f", shown); if (s == "+0" || s == "-0") s = "0";
+       s = sprintf("%+d", shown); if (s == "+0" || s == "-0") s = "0";
        printf "%s%s\033[0m", color, s
      }'
 }

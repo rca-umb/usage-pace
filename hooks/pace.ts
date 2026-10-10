@@ -46,10 +46,12 @@ export const sessionColorFor = (windows: PaceWindow[], follow: string) => {
   return window === undefined ? undefined : SESSION_COLOR[window.tone]
 }
 
+export const normalizeThreshold = (threshold: number) => Math.max(0, Math.round(threshold))
+
 export const optionsEnv = (o: { aheadIsPositive: boolean; threshold: number; showCountdown: boolean }) =>
   [
     `USAGE_PACE_AHEAD_POSITIVE=${o.aheadIsPositive ? 1 : 0}`,
-    `USAGE_PACE_THRESHOLD=${Math.max(0, Math.round(o.threshold))}`,
+    `USAGE_PACE_THRESHOLD=${normalizeThreshold(o.threshold)}`,
     `USAGE_PACE_COUNTDOWN=${o.showCountdown ? 1 : 0}`,
   ].join('\n') + '\n'
 

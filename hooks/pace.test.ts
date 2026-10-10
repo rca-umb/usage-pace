@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 
-import { computePace, optionsEnv, paceDiff, sessionColorFor, toneFor, unwrapStatusLine, wrapStatusLine } from './pace'
+import { computePace, normalizeThreshold, optionsEnv, paceDiff, sessionColorFor, toneFor, unwrapStatusLine, wrapStatusLine } from './pace'
 
 const NOW = Date.parse('2026-10-07T12:00:00Z')
 const readings = [
@@ -27,6 +27,11 @@ test('sessionColorFor follows the chosen window', () => {
   expect(sessionColorFor(computePace(readings, NOW, 5), 'worse')).toBe('red')
   expect(sessionColorFor([], '5h')).toBeUndefined()
   expect(sessionColorFor([], 'worse')).toBeUndefined()
+})
+
+test('normalizeThreshold rounds and floors at zero', () => {
+  expect(normalizeThreshold(7.4)).toBe(7)
+  expect(normalizeThreshold(-3)).toBe(0)
 })
 
 test('optionsEnv writes shell-safe values', () => {

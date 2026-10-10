@@ -6,21 +6,21 @@
   "userConfig": {
     "sessionColor": {
       "type": "string",
-      "title": "Session color follows pace",
-      "description": "Run /color green, yellow or red as the chosen window's pace changes; worse follows whichever window is further over pace.",
+      "title": "Session color by pace",
+      "description": "Which window sets the session color (green, yellow or red): 5h, 7d, or worse (whichever is further over pace). Off leaves the color alone.",
       "options": ["off", "5h", "7d", "worse"],
-      "default": "5h"
+      "default": "worse"
     },
     "aheadIsPositive": {
       "type": "boolean",
-      "title": "Ahead of pace is positive",
-      "description": "Show being under pace as a positive number instead of a negative one.",
+      "title": "Show under pace as positive",
+      "description": "By default, using less than the time elapsed shows as negative (-12). Turn on to show it as +12.",
       "default": false
     },
     "threshold": {
       "type": "number",
-      "title": "On-track band",
-      "description": "Points either side of pace that still count as on track (yellow).",
+      "title": "On-pace margin (±)",
+      "description": "How many points from pace still count as on pace (yellow). At 5, anything from -5 to +5 is yellow.",
       "default": 5
     },
     "showCountdown": {

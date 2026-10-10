@@ -1,5 +1,6 @@
 {
   "name": "usage-pace",
+  "description": "Usage pace for your Claude Code status line.",
   "owner": { "name": "rca-umb" },
   "plugins": [{ "name": "usage-pace", "source": "./" }]
 }

@@ -1,6 +1,6 @@
 import type { Hook, Register } from 'claude-code'
 
-import { computePace, optionsEnv, sessionColorFor, unwrapStatusLine, wrapStatusLine } from './pace'
+import { computePace, normalizeThreshold, optionsEnv, sessionColorFor, unwrapStatusLine, wrapStatusLine } from './pace'
 
 const REFRESH_MS = 60_000
 
@@ -68,7 +68,7 @@ function tint($: Host, readings: Reading[], options: Options) {
     return
   }
 
-  const color = sessionColorFor(computePace(readings, Date.now(), options.threshold), options.sessionColor)
+  const color = sessionColorFor(computePace(readings, Date.now(), normalizeThreshold(options.threshold)), options.sessionColor)
   if (color !== undefined && color !== lastColor) {
     lastColor = color
     // Queued by the engine until the session is idle.
@@ -83,9 +83,6 @@ export const register: Register = (on, rawOptions) => {
   let timer: { cancel: () => void } | undefined
 
   on('session.start', async ($, e, next) => {
-    // Clears the pinned line earlier versions drew.
-    $.ui.status(undefined)
-
     await $.command.register({ name: 'pace-setup', description: 'Add usage pace to the end of your status line' })
     await $.command.register({ name: 'pace-remove', description: 'Restore your status line without usage pace' })
 
