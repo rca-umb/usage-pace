@@ -1,17 +1,21 @@
 #!/bin/bash
 # Runs the person's own statusLine command, then appends the pace segment.
 
-dir="$HOME/.claude/usage-pace"
+dir=$(dirname "$0")
 input=$(cat)
 
-[ -f "$dir/options.env" ] && . "$dir/options.env"
-export USAGE_PACE_AHEAD_POSITIVE USAGE_PACE_THRESHOLD USAGE_PACE_COUNTDOWN
+flip="" threshold="" countdown=""
+if [ -f "$dir/options.env" ]; then
+  flip=$(sed -n 's/^USAGE_PACE_AHEAD_POSITIVE=//p' "$dir/options.env")
+  threshold=$(sed -n 's/^USAGE_PACE_THRESHOLD=//p' "$dir/options.env")
+  countdown=$(sed -n 's/^USAGE_PACE_COUNTDOWN=//p' "$dir/options.env")
+fi
 
 base=""
 if [ -s "$dir/original-command" ]; then
   base=$(printf '%s' "$input" | bash -c "$(cat "$dir/original-command")" 2>/dev/null)
 fi
-segment=$(printf '%s' "$input" | bash "$dir/pace-segment.sh")
+segment=$(printf '%s' "$input" | bash "$dir/pace-segment.sh" "$flip" "$threshold" "$countdown")
 
 if [ -z "$base" ]; then
   printf '%s\n' "$segment"

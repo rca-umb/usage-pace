@@ -45,6 +45,15 @@ Change these in `/config`:
 | On-pace margin (±) | 5 | How many points from pace still count as on pace (yellow) |
 | Show 5h reset countdown | on | Appends the time until the 5-hour window resets |
 
+## What it changes on your machine
+
+- **Files:** `/pace-setup` copies `wrapper.sh` and `pace-segment.sh` into `~/.claude/usage-pace/`, and saves your settings (`options.env`) and your previous status line command (`original-command`) there. At each session start, once set up, it refreshes these to match the installed version and your settings.
+- **Status line:** `/pace-setup` sets `statusLine` in `~/.claude/settings.json` to run `wrapper.sh`, which runs your original command and appends the pace segment. `/pace-remove` puts your original command back.
+- **Session color:** unless Session color by pace is `off`, the plugin runs `/color green`, `/color yellow` or `/color red` when the pace color changes. It checks at session start, when usage updates, and once a minute, and only runs `/color` when the color differs from the last one it set.
+- **Commands:** it adds `/pace-setup` and `/pace-remove`, and its `command.run` hooks only handle those two.
+
+Nothing is sent off your machine. The scripts read the usage numbers Claude Code passes to the status line and compute pace locally with `jq` and `awk`.
+
 ## Uninstall
 
 First restore your original status line:

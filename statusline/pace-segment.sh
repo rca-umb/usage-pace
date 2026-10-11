@@ -1,13 +1,14 @@
 #!/bin/bash
 # Prints the pace segment for Claude Code's statusLine JSON on stdin.
-# Options (env): USAGE_PACE_AHEAD_POSITIVE=1 flips signs, USAGE_PACE_THRESHOLD=5,
-# USAGE_PACE_COUNTDOWN=1 shows the 5h reset countdown.
+# Usage: pace-segment.sh [flip] [threshold] [countdown]
+#   flip=1 shows under pace as positive, threshold is the on-pace margin (5),
+#   countdown=1 shows the 5h reset countdown.
 
 input=$(cat)
 now=$(date +%s)
-flip=${USAGE_PACE_AHEAD_POSITIVE:-0}
-threshold=${USAGE_PACE_THRESHOLD:-5}
-show_countdown=${USAGE_PACE_COUNTDOWN:-1}
+flip=${1:-0}
+threshold=${2:-5}
+show_countdown=${3:-1}
 
 pace_diff() {
   awk -v u="$1" -v r="$2" -v n="$now" -v w="$3" -v t="$threshold" -v f="$flip" \
@@ -23,21 +24,22 @@ pace_diff() {
      }'
 }
 
+five_used=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+week_used=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+week_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
+
 parts=""
-for spec in "five_hour:5h:18000" "seven_day:7d:604800"; do
-  IFS=: read -r kind label secs <<<"$spec"
-  used=$(echo "$input" | jq -r ".rate_limits.$kind.used_percentage // empty")
-  reset=$(echo "$input" | jq -r ".rate_limits.$kind.resets_at // empty")
-  if [ -n "$used" ] && [ -n "$reset" ]; then
-    seg="$label $(pace_diff "$used" "$reset" "$secs")"
-    parts="${parts:+$parts, }$seg"
-  fi
-done
+if [ -n "$five_used" ] && [ -n "$five_reset" ]; then
+  parts="5h $(pace_diff "$five_used" "$five_reset" 18000)"
+fi
+if [ -n "$week_used" ] && [ -n "$week_reset" ]; then
+  parts="${parts:+$parts, }7d $(pace_diff "$week_used" "$week_reset" 604800)"
+fi
 
 [ -z "$parts" ] && exit 0
 
 out="pace $parts"
-five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 if [ "$show_countdown" = "1" ] && [ -n "$five_reset" ]; then
   remaining=$((five_reset - now)); [ "$remaining" -lt 0 ] && remaining=0
   out="$out | 5h resets in $(printf '%dh%02dm' $((remaining / 3600)) $(((remaining % 3600) / 60)))"
