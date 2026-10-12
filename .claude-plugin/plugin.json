@@ -5,6 +5,7 @@
   "author": { "name": "rca-umb" },
   "repository": "https://github.com/rca-umb/usage-pace",
   "supportUrl": "https://github.com/rca-umb/usage-pace/issues",
+  "keywords": ["usage", "rate-limits", "statusline", "status-line", "pace"],
   "userConfig": {
     "sessionColor": {
       "type": "string",
