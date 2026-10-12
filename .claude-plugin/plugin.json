@@ -3,6 +3,8 @@
   "version": "0.1.1",
   "description": "Adds a pace indicator for your 5h and 7d usage to your existing status line, and can tint the session color to match.",
   "author": { "name": "rca-umb" },
+  "repository": "https://github.com/rca-umb/usage-pace",
+  "supportUrl": "https://github.com/rca-umb/usage-pace/issues",
   "userConfig": {
     "sessionColor": {
       "type": "string",
