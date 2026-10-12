@@ -45,7 +45,7 @@ Change these in `/config`:
 | On-pace margin (±) | 5 | How many points from pace still count as on pace (yellow) |
 | Show 5h reset countdown | on | Appends the time until the 5-hour window resets |
 
-## What it changes on your machine
+## How it Works
 
 - **Files:** `/pace-setup` copies `wrapper.sh` and `pace-segment.sh` into `~/.claude/usage-pace/`, and saves your settings (`options.env`) and your previous status line command (`original-command`) there. At each session start, once set up, it refreshes these to match the installed version and your settings.
 - **Status line:** `/pace-setup` sets `statusLine` in `~/.claude/settings.json` to run `wrapper.sh`, which runs your original command and appends the pace segment. `/pace-remove` puts your original command back.
